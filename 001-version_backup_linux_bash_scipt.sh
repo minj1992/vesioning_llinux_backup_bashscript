@@ -5,6 +5,18 @@ set +e
 backup_location="/efs/master_backup"
 source_location="/test123"
 
+if ! command -v zip >/dev/null 2>&1; then
+    if command -v apt >/dev/null 2>&1; then
+        sudo apt install -y zip
+    elif command -v yum >/dev/null 2>&1; then
+        sudo yum install -y zip
+    else
+        echo "Neither apt nor yum found. Cannot install zip." >&2
+        exit 1
+    fi
+fi
+
+
 # Check if /master_backup folder exists or not; if not, create the /master_backup folder
 if [ ! -d "${backup_location}" ]; then
   echo "Creating /master_backup directory..."
